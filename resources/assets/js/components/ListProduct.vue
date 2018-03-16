@@ -24,7 +24,7 @@
                             <td class="text-center">{{ product.name }}</td>
                             <td class="text-center">{{ product.price }}$</td>
                             <td class="text-center">
-                                <router-link to="/products/edit">
+                                <router-link :to="'/products/edit/'+product.id">
                                     <a type="button" class="btn btn-primary">Edit</a>
                                 </router-link>
                                 <a type="button" class="btn btn-danger">Delete</a>

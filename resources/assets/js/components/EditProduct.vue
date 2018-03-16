@@ -3,29 +3,39 @@
         <div class="panel panel-primary">
             <div class="panel-heading">Edit product</div>
             <div class="panel-body">
-                <form class="form-horizontal" action="/action_page.php">
+                <form v-on:submit.prevent="addProduct" class="form-horizontal">
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="email">Name:</label>
+                        <label class="control-label col-sm-1">Name:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="email" placeholder="Enter name">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2"  >Price:</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" placeholder="Enter price">
+                            <input type="text" value="123" v-model="form" class="form-control" placeholder="Enter name">
+                            <div class="alert alert-danger" v-if="messages.name" style="margin-top: 10px;margin-bottom: -3px;">
+                                <strong>{{messages.name[0]}}</strong>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-sm-2" >Content:</label>
+                        <label class="control-label col-sm-1">Price:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" placeholder="Enter content">
+                            <input type="text" v-model="form_data.price" class="form-control" placeholder="Enter price">
+                            <div class="alert alert-danger" v-if="messages.price" style="margin-top: 10px;margin-bottom: -3px;">
+                                <strong>{{messages.price[0]}}</strong>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
+                        <label class="control-label col-sm-1" >Content:</label>
+                        <div class="col-sm-10">
+                            <input type="text" v-model="form_data.content" class="form-control" placeholder="Enter content">
+                            <div class="alert alert-danger"  v-if="messages.content" style="margin-top: 10px;margin-bottom: -3px;">
+                                <strong>{{messages.content[0]}}</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <div class="col-sm-12">
                             <button type="submit" class="btn btn-success">Edit</button>
                         </div>
                     </div>
@@ -36,9 +46,44 @@
 </template>
 
 <script>
+
+    import VueResource from 'vue-resource'
+    Vue.use(VueResource);
+
     export default {
-        mounted() {
-            console.log('Component mounted.')
-        }
+        data() {
+            return {
+                id: this.$route.params.id,
+                form_data:{},
+                messages: {},
+                item: {},
+            }
+        },
+
+        created() {
+            var resource = this.$resource('products{/id}');
+            resource.get({id: this.id}).then(response => {
+                this.item = response.body;
+            });
+        },
+
+        methods: {
+            addProduct(){
+                var resource = this.$resource('products', {});
+                resource.save({}, this.form_data).then(function(response) {
+                    window.location.href = "/";
+                }, function(response) {
+                    if(response) {
+                        this.messages = response.data;
+                    }
+                });
+            },
+        },
+        http: {
+            root: '/api',
+            headers: {
+                Accept: 'application/json',
+            }
+        },
     }
 </script>

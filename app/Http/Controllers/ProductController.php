@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Product;
+use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
@@ -14,7 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = Product::orderBy('id', 'ASC')->paginate(10);
+        $product = Product::orderBy('id', 'DESC')->paginate(10);
         return $product;
     }
 
@@ -34,9 +35,11 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        //
+        $data = $request->all();
+        $product = Product::create($data);
+        return $product;
     }
 
     /**
@@ -47,7 +50,8 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $product = Product::find($id);
+        return $product;
     }
 
     /**

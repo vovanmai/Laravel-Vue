@@ -17,7 +17,7 @@ let routes = [
 
 
     {
-        path:'/products/edit',
+        path:'/products/edit/:id',
         component: EditProduct,
     },
     {
