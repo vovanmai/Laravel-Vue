@@ -45745,6 +45745,8 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -45822,13 +45824,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             fetch(page_url).then(function (res) {
                 return res.json();
             }).then(function (res) {
+                var _paginate;
+
                 _this.products = res.data;
-                var paginate = {
+                var tmp_url = window.location.origin + "/api/products?page=";
+                var paginate = (_paginate = {
                     current_page: res.current_page,
                     last_page: res.last_page,
                     next_page_url: res.next_page_url,
                     prev_page_url: res.prev_page_url
-                };
+                }, _defineProperty(_paginate, 'prev_page_url', res.prev_page_url), _defineProperty(_paginate, 'tmp_url', tmp_url), _paginate);
                 _this.pagination = paginate;
             });
         }
@@ -45947,19 +45952,29 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _vm._l(_vm.pagination.last_page, function(pageNumber) {
-                    return _c("li", {}, [
-                      _c(
-                        "a",
-                        {
-                          on: {
-                            click: function($event) {
-                              _vm.fetchProducts(_vm.pagination.next_page_url)
+                    return _c(
+                      "li",
+                      {
+                        class: {
+                          active: _vm.pagination.current_page == pageNumber
+                        }
+                      },
+                      [
+                        _c(
+                          "a",
+                          {
+                            on: {
+                              click: function($event) {
+                                _vm.fetchProducts(
+                                  _vm.pagination.tmp_url + pageNumber
+                                )
+                              }
                             }
-                          }
-                        },
-                        [_vm._v(_vm._s(pageNumber))]
-                      )
-                    ])
+                          },
+                          [_vm._v(_vm._s(pageNumber))]
+                        )
+                      ]
+                    )
                   }),
                   _vm._v(" "),
                   _c(

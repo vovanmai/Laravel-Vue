@@ -36,7 +36,7 @@
                     <div class="text-right">
                         <ul class="pagination">
                             <li v-bind:class="{ disabled : !pagination.prev_page_url }"><a v-on:click=fetchProducts(pagination.prev_page_url) >Previous</a></li>
-                            <li v-for="pageNumber in pagination.last_page" class=""><a v-on:click=fetchProducts(pagination.next_page_url) >{{pageNumber}}</a></li>
+                            <li v-for="pageNumber in pagination.last_page" v-bind:class="{active: pagination.current_page == pageNumber}"><a v-on:click=fetchProducts(pagination.tmp_url+pageNumber) >{{pageNumber}}</a></li>
                             <li v-bind:class="{ disabled: !pagination.next_page_url }"><a v-on:click=fetchProducts(pagination.next_page_url) >Next</a></li>
                         </ul>
                     </div>
@@ -59,7 +59,7 @@
                 },
                 product_id: '',
                 pagination: {},
-                edit: false
+                edit: false,
             }
         },
         created() {
@@ -73,11 +73,14 @@
                     .then(res => res.json())
                     .then(res => {
                         this.products = res.data;
+                        let tmp_url = window.location.origin + "/api/products?page=";
                         let paginate = {
                             current_page: res.current_page,
                             last_page: res.last_page,
                             next_page_url: res.next_page_url,
                             prev_page_url: res.prev_page_url,
+                            prev_page_url: res.prev_page_url,
+                            tmp_url: tmp_url,
                         };
                         this.pagination = paginate;
                     })
