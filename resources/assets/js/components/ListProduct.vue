@@ -11,25 +11,25 @@
                     </div>
                     <table class="table table-bordered">
                         <thead>
-                        <tr>
-                            <th width="25%" class="text-center">id</th>
-                            <th width="25%" class="text-center">Name</th>
-                            <th width="25%" class="text-center">Price</th>
-                            <th width="25%" class="text-center">Functions</th>
-                        </tr>
+                            <tr>
+                                <th width="25%" class="text-center">id</th>
+                                <th width="25%" class="text-center">Name</th>
+                                <th width="25%" class="text-center">Price</th>
+                                <th width="25%" class="text-center">Functions</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="product in products">
-                            <td class="text-center">{{ product.id }}</td>
-                            <td class="text-center">{{ product.name }}</td>
-                            <td class="text-center">{{ product.price }}$</td>
-                            <td class="text-center">
-                                <router-link :to="'/products/edit/'+product.id">
-                                    <a type="button" class="btn btn-primary">Edit</a>
-                                </router-link>
-                                <a type="button" class="btn btn-danger">Delete</a>
-                            </td>
-                        </tr>
+                            <tr v-for="(product, index) in products">
+                                <td class="text-center">{{ product.id }}</td>
+                                <td class="text-center">{{ product.name }}</td>
+                                <td class="text-center">{{ product.price }}$</td>
+                                <td class="text-center">
+                                    <router-link :to="'/products/edit/'+product.id">
+                                        <a type="button" class="btn btn-primary">Edit</a>
+                                    </router-link>
+                                    <a type="button" v-on:click.prevent= deleteProduct(product.id,index) class="btn btn-danger">Delete</a>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
 
@@ -67,24 +67,36 @@
         },
         methods: {
             fetchProducts(page_url) {
-                page_url = page_url || 'api/products';
-                console.log(page_url);
-                fetch(page_url)
-                    .then(res => res.json())
-                    .then(res => {
-                        this.products = res.data;
-                        let tmp_url = window.location.origin + "/api/products?page=";
-                        let paginate = {
-                            current_page: res.current_page,
-                            last_page: res.last_page,
-                            next_page_url: res.next_page_url,
-                            prev_page_url: res.prev_page_url,
-                            prev_page_url: res.prev_page_url,
-                            tmp_url: tmp_url,
-                        };
-                        this.pagination = paginate;
-                    })
+                page_url = page_url || 'products';
+                var resource = this.$resource(page_url);
+                resource.get({}).then(response => {
+                    this.products = response.body.data;
+                    let tmp_url = window.location.origin + "/api/products?page=";
+                    let paginate = {
+                        current_page: response.body.current_page,
+                        last_page: response.body.last_page,
+                        next_page_url: response.body.next_page_url,
+                        prev_page_url: response.body.prev_page_url,
+                        prev_page_url: response.body.prev_page_url,
+                        tmp_url: tmp_url,
+                    };
+                    this.pagination = paginate;
+                });
+            },
+            deleteProduct(id, index) {
+                var resource = this.$resource('products{/id}');
+                resource.delete({id: id}).then(response => {
+                    this.$delete(this.products, index);
+                }, response => {
+                    // error callback
+                });
+            },
+        },
+        http: {
+            root: '/api',
+            headers: {
+                Accept: 'application/json',
             }
-        }
+        },
     }
 </script>

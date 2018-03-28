@@ -3,11 +3,11 @@
         <div class="panel panel-primary">
             <div class="panel-heading">Edit product</div>
             <div class="panel-body">
-                <form v-on:submit.prevent="addProduct" class="form-horizontal">
+                <form v-on:submit.prevent="editProduct" class="form-horizontal">
                     <div class="form-group">
                         <label class="control-label col-sm-1">Name:</label>
                         <div class="col-sm-10">
-                            <input type="text" value="123" v-model="form" class="form-control" placeholder="Enter name">
+                            <input type="text" v-model="form_data.name" class="form-control" placeholder="Enter name">
                             <div class="alert alert-danger" v-if="messages.name" style="margin-top: 10px;margin-bottom: -3px;">
                                 <strong>{{messages.name[0]}}</strong>
                             </div>
@@ -56,21 +56,21 @@
                 id: this.$route.params.id,
                 form_data:{},
                 messages: {},
-                item: {},
+                items: {},
             }
         },
 
         created() {
             var resource = this.$resource('products{/id}');
             resource.get({id: this.id}).then(response => {
-                this.item = response.body;
+                this.items = response.body;
             });
         },
 
         methods: {
-            addProduct(){
-                var resource = this.$resource('products', {});
-                resource.save({}, this.form_data).then(function(response) {
+            editProduct(){
+                var resource = this.$resource('products{/id}', {});
+                resource.update({id: this.id}, this.form_data).then(function(response) {
                     window.location.href = "/";
                 }, function(response) {
                     if(response) {

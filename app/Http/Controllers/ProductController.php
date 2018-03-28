@@ -5,9 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Product;
 use App\Http\Requests\ProductRequest;
+use Illuminate\Validation\ValidationException;
+use Exception;
+use Illuminate\Support\Facades\Storage;
+use App\File;
 
 class ProductController extends Controller
 {
+    private $image_ext = ['jpg', 'jpeg', 'png', 'gif'];
+    private $audio_ext = ['mp3', 'ogg', 'mpga'];
+    private $video_ext = ['mp4', 'mpeg'];
+    private $document_ext = ['doc', 'docx', 'pdf', 'odt'];
+
     /**
      * Display a listing of the resource.
      *
@@ -37,9 +46,9 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        $data = $request->all();
-        $product = Product::create($data);
-        return $product;
+        $file = $request->file('file');
+        $ext = $file->getClientOriginalExtension();
+        
     }
 
     /**
@@ -72,9 +81,11 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
-        //
+        $data = $request->all();
+        $product = Product::find($id);
+        $product->update($data);
     }
 
     /**
@@ -85,6 +96,7 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::find($id);
+        $product->delete();
     }
 }
