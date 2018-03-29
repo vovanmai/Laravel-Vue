@@ -46,9 +46,21 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        $file = $request->file('file');
-        $ext = $file->getClientOriginalExtension();
-        
+        $name = $request->name;
+        $price = $request->price;
+        $content = $request->content;
+        $path = $request->file('image')->store('public/images');
+        $tmp = explode('/', $path);
+        $imageName = end($tmp);
+        if ($path) {
+            Product::create([
+                'name' => $name,
+                'price' => $price,
+                'content' => $content,
+                'image' => $imageName,
+            ]);
+        }
+
     }
 
     /**

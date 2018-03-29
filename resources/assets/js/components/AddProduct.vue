@@ -26,9 +26,9 @@
                     <div class="form-group">
                         <label class="control-label col-sm-1">Image:</label>
                         <div class="col-sm-10">
-                            <input type="file" @change="addFile" ref="file" class="form-control" placeholder="Enter price">
-                            <div class="alert alert-danger" v-if="messages.file" style="margin-top: 10px;margin-bottom: -3px;">
-                                <strong>{{messages.file[0]}}</strong>
+                            <input type="file" @change="addFile" ref="image" class="form-control" placeholder="Enter price">
+                            <div class="alert alert-danger" v-if="messages.image" style="margin-top: 10px;margin-bottom: -3px;">
+                                <strong>{{messages.image[0]}}</strong>
                             </div>
                         </div>
                     </div>
@@ -71,19 +71,19 @@
         },
         methods: {
             addFile() {
-                this.attachment = this.$refs.file.files[0];
+                this.attachment = this.$refs.image.files[0];
             },
             addProduct(){
                 this.formData = new FormData();
                 this.formData.append('name', this.name);
                 this.formData.append('price', this.price);
-                this.formData.append('file', this.attachment);
+                this.formData.append('image', this.attachment);
                 this.formData.append('content', this.content);
 
                 var resource = this.$resource('products', {});
                 resource.save({}, this.formData).then(function(response) {
                     this.messages = {};
-                    // window.location.href = "/";
+                    window.location.href = "/";
                 }, function(response) {
                     if(response) {
                         this.messages = response.data;

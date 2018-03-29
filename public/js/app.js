@@ -47516,6 +47516,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -47630,6 +47634,16 @@ var render = function() {
                     _vm._v(" "),
                     _c("td", { staticClass: "text-center" }, [
                       _vm._v(_vm._s(product.price) + "$")
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-center" }, [
+                      _c("img", {
+                        staticStyle: { height: "150px", width: "150px" },
+                        attrs: {
+                          src: "/storage/images/" + product.image,
+                          alt: ""
+                        }
+                      })
                     ]),
                     _vm._v(" "),
                     _c(
@@ -47756,16 +47770,20 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", { staticClass: "text-center", attrs: { width: "25%" } }, [
+        _c("th", { staticClass: "text-center", attrs: { width: "15%" } }, [
           _vm._v("id")
         ]),
         _vm._v(" "),
-        _c("th", { staticClass: "text-center", attrs: { width: "25%" } }, [
+        _c("th", { staticClass: "text-center", attrs: { width: "20%" } }, [
           _vm._v("Name")
         ]),
         _vm._v(" "),
-        _c("th", { staticClass: "text-center", attrs: { width: "25%" } }, [
+        _c("th", { staticClass: "text-center", attrs: { width: "20%" } }, [
           _vm._v("Price")
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center", attrs: { width: "20%" } }, [
+          _vm._v("Image")
         ]),
         _vm._v(" "),
         _c("th", { staticClass: "text-center", attrs: { width: "25%" } }, [
@@ -47912,19 +47930,19 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_resource__["a" /* default */]);
 
     methods: {
         addFile: function addFile() {
-            this.attachment = this.$refs.file.files[0];
+            this.attachment = this.$refs.image.files[0];
         },
         addProduct: function addProduct() {
             this.formData = new FormData();
             this.formData.append('name', this.name);
             this.formData.append('price', this.price);
-            this.formData.append('file', this.attachment);
+            this.formData.append('image', this.attachment);
             this.formData.append('content', this.content);
 
             var resource = this.$resource('products', {});
             resource.save({}, this.formData).then(function (response) {
                 this.messages = {};
-                // window.location.href = "/";
+                window.location.href = "/";
             }, function (response) {
                 if (response) {
                     this.messages = response.data;
@@ -48076,13 +48094,13 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-sm-10" }, [
                 _c("input", {
-                  ref: "file",
+                  ref: "image",
                   staticClass: "form-control",
                   attrs: { type: "file", placeholder: "Enter price" },
                   on: { change: _vm.addFile }
                 }),
                 _vm._v(" "),
-                _vm.messages.file
+                _vm.messages.image
                   ? _c(
                       "div",
                       {
@@ -48092,7 +48110,7 @@ var render = function() {
                           "margin-bottom": "-3px"
                         }
                       },
-                      [_c("strong", [_vm._v(_vm._s(_vm.messages.file[0]))])]
+                      [_c("strong", [_vm._v(_vm._s(_vm.messages.image[0]))])]
                     )
                   : _vm._e()
               ])

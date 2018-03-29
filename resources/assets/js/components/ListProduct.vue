@@ -12,9 +12,10 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th width="25%" class="text-center">id</th>
-                                <th width="25%" class="text-center">Name</th>
-                                <th width="25%" class="text-center">Price</th>
+                                <th width="15%" class="text-center">id</th>
+                                <th width="20%" class="text-center">Name</th>
+                                <th width="20%" class="text-center">Price</th>
+                                <th width="20%" class="text-center">Image</th>
                                 <th width="25%" class="text-center">Functions</th>
                             </tr>
                         </thead>
@@ -23,6 +24,9 @@
                                 <td class="text-center">{{ product.id }}</td>
                                 <td class="text-center">{{ product.name }}</td>
                                 <td class="text-center">{{ product.price }}$</td>
+                                <td class="text-center">
+                                    <img style="height: 150px; width: 150px;" :src="'/storage/images/'+ product.image" alt="">
+                                </td>
                                 <td class="text-center">
                                     <router-link :to="'/products/edit/'+product.id">
                                         <a type="button" class="btn btn-primary">Edit</a>
